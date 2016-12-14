@@ -27,7 +27,7 @@ namespace BeWellApi.Controllers
 
         // GET: api/Assessment
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [Route("api/Emotions/{CategoryId}")]
         //The Emotions will be grouped by category and the data will be called to each component based on the Category Id.
         public IEnumerable<Emotion> GetEmotion(int CategoryId)
@@ -96,7 +96,7 @@ namespace BeWellApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return Json(ModelState);
             }
 
             _context.Emotion.Add(emotion);

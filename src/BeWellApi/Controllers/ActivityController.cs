@@ -28,7 +28,7 @@ namespace BeWellApi.Controllers
 
         // GET: api/Activity
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [Route("api/GetActivities/{IsMeditation}")]
         //If meditations are wanted then IsMeditation should be 1. If other activities are wanted then IsMeditation should be 0. This is for users to see all of the meditations and other activities on the menu.
         public async Task<IActionResult> GetActivities(int IsMeditation)
@@ -52,7 +52,7 @@ namespace BeWellApi.Controllers
 
         // GET: api/Activity/5
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
         [Route("api/Activity/{id}")]
         //This will be utilized when an activity is needed as part of the three suggested activities
         public async Task<IActionResult> GetActivity([FromRoute] int id)
@@ -135,7 +135,7 @@ namespace BeWellApi.Controllers
         // PUT: api/Activity/5
         [HttpPut("{id}")]
         [Route("api/EditActivity/{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PutActivity([FromRoute] int id, [FromBody]NewActivityViewModel activity)
         {
             if (!ModelState.IsValid)
@@ -172,7 +172,7 @@ namespace BeWellApi.Controllers
         // DELETE: api/DeleteActivity/5
         [HttpDelete("{id}")]
         [Route("api/DeleteActivity/{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteActivity([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -205,7 +205,7 @@ namespace BeWellApi.Controllers
 
         [HttpPost]
         [Route("api/SaveActivity/{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> SaveActivity([FromRoute] int id)
         {
             var activity = _context.Activity.Single(a => a.ActivityId == id);

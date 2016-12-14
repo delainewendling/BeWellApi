@@ -11,10 +11,13 @@ using Microsoft.Extensions.Logging;
 using BeWellApi.Models;
 using BeWellApi.Models.AccountViewModels;
 using BeWellApi.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace BeWellApi.Controllers
 {
     [Authorize]
+    [Produces("application/json")]
+    [EnableCors("AllowDevelopmentEnvironment")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -41,7 +44,7 @@ namespace BeWellApi.Controllers
         // Allows for a json post registration
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterJson([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> RegisterJson([FromForm] RegisterViewModel model)
         {
 
             var user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email };
@@ -84,7 +87,8 @@ namespace BeWellApi.Controllers
                 }
             }
 
-            return Json(new { failure = "Unable to login user." });
+            return Json(ModelState);
+            //return Json(new { failure = "Unable to login user." });
         }
 
         // allows API logoff and returns json response
