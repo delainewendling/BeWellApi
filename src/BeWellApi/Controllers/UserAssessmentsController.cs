@@ -56,40 +56,40 @@ namespace BeWellApi.Controllers
             return Ok(userAssessment);
         }
 
-        // PUT: UserAssessments/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserAssessment([FromRoute] int id, [FromBody] UserAssessment userAssessment)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// PUT: UserAssessments/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutUserAssessment([FromRoute] int id, [FromBody] UserAssessment userAssessment)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (id != userAssessment.UserAssessmentId)
-            {
-                return BadRequest();
-            }
+        //    if (id != userAssessment.UserAssessmentId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(userAssessment).State = EntityState.Modified;
+        //    _context.Entry(userAssessment).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserAssessmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserAssessmentExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: /UserAssessments
         [HttpPost]
