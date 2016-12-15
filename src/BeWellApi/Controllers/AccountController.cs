@@ -73,7 +73,7 @@ namespace BeWellApi.Controllers
                 {
                     _logger.LogInformation(1, "User logged in.");
                     var loggedinUser = GetCurrentUserAsync();
-                    return Json(new { success = "Logged in successfully!" });
+                    return Json(new { success = "Logged in successfully!", User = loggedinUser});
                 }
                 if (result.IsLockedOut)
                 {
@@ -88,7 +88,6 @@ namespace BeWellApi.Controllers
             }
 
             return Json(ModelState);
-            //return Json(new { failure = "Unable to login user." });
         }
 
         // allows API logoff and returns json response

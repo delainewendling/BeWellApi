@@ -58,7 +58,7 @@ namespace BeWellApi.Controllers
         //    return Ok(emotion);
         //}
 
-        // POST: api/Assessment
+        // POST: /Emotion
         [HttpPost]
         [Route("Emotion")]
         public async Task<IActionResult> PostEmotion([FromBody] UserEmotion userEmotion)
