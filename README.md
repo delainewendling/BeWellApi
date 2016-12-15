@@ -1,6 +1,6 @@
-<<<<<<< HEAD
-# Be Well
+# Be Well API
 
-=======
-# BeWellApi
->>>>>>> 86fe1000d9161bb0d4b8169cef63dfca55e27dc8
+A .NET entity framework API hosted in Azure written to be consumed by a meditation and anxiety relieving application. The repository for the React frontend, consuming this API, is located (here)[url].
+
+ 
+
