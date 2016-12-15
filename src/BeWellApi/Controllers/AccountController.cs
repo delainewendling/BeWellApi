@@ -44,7 +44,7 @@ namespace BeWellApi.Controllers
         // Allows for a json post registration
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterJson([FromForm] RegisterViewModel model)
+        public async Task<IActionResult> RegisterJson([FromBody] RegisterViewModel model)
         {
 
             var user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, Email = model.Email };

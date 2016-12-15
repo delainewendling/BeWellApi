@@ -12,28 +12,31 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BeWellApi.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
-    public class AssessmentController : Controller
+    public class EmotionController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AssessmentController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public EmotionController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        // GET: api/Assessment
         [HttpGet]
-        [Authorize]
-        [Route("api/Emotions/{CategoryId}")]
+        [Route("Emotions/{CategoryId}")]
         //The Emotions will be grouped by category and the data will be called to each component based on the Category Id.
-        public IEnumerable<Emotion> GetEmotion(int CategoryId)
+        public async Task<IActionResult> GetEmotion(int CategoryId)
         {
-            var emotions = _context.Emotion.Where(e => e.EmotionCategoryId == CategoryId).ToList();
-            return emotions;
+            var emotions = await _context.Emotion.Where(e => e.EmotionCategoryId == CategoryId).ToListAsync();
+            if (emotions == null)
+            {
+                return NotFound();
+            }
+            return Json(emotions);
         }
 
         // GET: api/Assessment/5
@@ -44,7 +47,7 @@ namespace BeWellApi.Controllers
         //    {
         //        return BadRequest(ModelState);
         //    }
-
+        
         //    Emotion emotion = await _context.Emotion.SingleOrDefaultAsync(m => m.EmotionId == id);
 
         //    if (emotion == null)
@@ -55,58 +58,30 @@ namespace BeWellApi.Controllers
         //    return Ok(emotion);
         //}
 
-        // PUT: api/Assessment/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmotion([FromRoute] int id, [FromBody] Emotion emotion)
+        // POST: api/Assessment
+        [HttpPost]
+        [Route("Emotion")]
+        public async Task<IActionResult> PostEmotion([FromBody] UserEmotion userEmotion)
         {
-            if (!ModelState.IsValid)
+            ModelState.Remove("User");
+            if (ModelState.IsValid)
+            {
+                var user = await GetCurrentUserAsync();
+                userEmotion.User = user;
+                _context.UserEmotion.Add(userEmotion);
+            }
+            else
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != emotion.EmotionId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(emotion).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmotionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Assessment
-        [HttpPost]
-        public async Task<IActionResult> PostEmotion([FromBody] Emotion emotion)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Json(ModelState);
-            }
-
-            _context.Emotion.Add(emotion);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (EmotionExists(emotion.EmotionId))
+                if (EmotionExists(userEmotion.UserEmotionId))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -116,7 +91,7 @@ namespace BeWellApi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetEmotion", new { id = emotion.EmotionId }, emotion);
+            return CreatedAtAction("GetEmotion", new { id = userEmotion.UserEmotionId }, userEmotion);
         }
 
         // DELETE: api/Assessment/5
