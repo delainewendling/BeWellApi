@@ -12,6 +12,7 @@ using BeWellApi.Models;
 using BeWellApi.Models.AccountViewModels;
 using BeWellApi.Services;
 using Microsoft.AspNetCore.Cors;
+using BeWellApi.Data;
 
 namespace BeWellApi.Controllers
 {
@@ -25,14 +26,17 @@ namespace BeWellApi.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -83,7 +87,7 @@ namespace BeWellApi.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Json(new { invalid = "Invalid login attempt." });
+                    return Json(ModelState);
                 }
             }
 
